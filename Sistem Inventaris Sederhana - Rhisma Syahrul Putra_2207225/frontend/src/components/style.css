@@ -1,0 +1,33 @@
+/* Navbar Styling */
+.navbar {
+    background-color: #282c34;
+}
+.navbar-brand {
+    font-size: 25px;
+    color:#FFD700;
+    transition: all 0.3s ease;
+}
+.navbar-brand:hover{
+    color: #d1b202;
+    transition: all 0.3s ease;
+}
+/* Footer Styling */
+.footer {
+    background-color: #282c34;
+}
+.footer-text {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.footer-link {
+    color: #FFD700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-link:Hover {
+    color: #d1b202;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+}
