@@ -1,4 +1,4 @@
-# **Sistem Inventaris Barang - UAS Pemrograman Internet**
+<h1 align="center"><bold></bold>Sistem Inventaris Barang - UAS Pemrograman Internet</bold></h1>
 
 Assalamualaikum Warahmatullahi Wabarakatuh,
 
@@ -25,16 +25,30 @@ React Js untuk bagian Frontend,Golang untuk Backend,dan MySQL sebagai basis data
 
 1. **Download MySQL table and import it into phpMyAdmin.**
    
-2. **Download the Backend and Frontend folders.**
+   1. **Create Database in phpMyAdmin**
+      
+       ```terminal
+       CREATE DATABASE db_2207225_rhismasyahrulputra_uas
+       ```
+   3. **Import Table in phpMyAdmin**
+      
+<br>
+3. **Download the Backend and Frontend folders.**
 
    ### For Backend folder
+   ```terminal
+   cd backed
+   ```
 
    1. **Install modules:**
+      
       - [gorilla/mux](https://github.com/gorilla/mux)
+        
         ```terminal
         go install github.com/gorilla/mux
         ```
       - [go-sql-driver/mysql](https://github.com/go-sql-driver/mysql)
+        
         ```terminal
         go install github.com/go-sql-driver/mysql
         ```
@@ -49,18 +63,23 @@ React Js untuk bagian Frontend,Golang untuk Backend,dan MySQL sebagai basis data
         ```
 
    ### For Frontend folder
+   ```terminal
+   cd frontend
+   ```
 
    1. **Download the frontend folder:**
+      
         - In the terminal, run:
+          
         ```terminal
         npm install
         ```
-   2. **Run the frontend.**
+   3. **Run the frontend.**
         ```terminal
         npm run dev
         ```
 
-3. **Enjoy the Code.**
+5. **Enjoy the Code.**
 <br>
 
 ---
