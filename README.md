@@ -9,7 +9,7 @@ React Js untuk bagian Frontend,Golang untuk Backend,dan MySQL sebagai basis data
 
 ## **Fitur Utama:**
 
-- React Js Frontend: Tampilan antarmuka yang user-friendly.
+- React Js (Vite js) + bootstrap Frontend: Tampilan antarmuka yang user-friendly.
 - Golang Backend: Server yang handal untuk mengelola logika bisnis dan interaksi dengan database.
 - MySQL Database: Penyimpanan data dari web.
 
