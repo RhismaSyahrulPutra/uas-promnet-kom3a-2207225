@@ -86,7 +86,8 @@ React Js untuk bagian Frontend,Golang untuk Backend,dan MySQL sebagai basis data
 
 Jika Anda memiliki pertanyaan atau masukan silakan hubungi saya melalui:<br>
 [Email](mailto:rhismasyahrulputra11@gmail.com)<br>
-[Instagram](https://www.instagram.com/huangfeihong__/)
+[Instagram](https://www.instagram.com/huangfeihong__/)<br>
+[Linkedin](https://www.linkedin.com/in/rhisma-syahrul-putra/)
 <br>
 
 Terima kasih atas perhatian Anda.
