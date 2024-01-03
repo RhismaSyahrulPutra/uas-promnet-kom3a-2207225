@@ -3,13 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Table, Button, Container, Row, Col, Modal, Card } from 'react-bootstrap';
 import InventoryService from '../services/InventoryService';
 
-
-// Custom CSS class for the table
 const customTableClass = "custom-table";
 
 function GetAllComponent() {
   const [inventoryItems, setInventoryItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,22 +29,29 @@ function GetAllComponent() {
     console.log('Viewing item with ID:', itemId);
     navigate(`/view-inventory/${itemId}`);
   };
-  
+
   const handleUpdate = (itemId) => {
     console.log('Updating item with ID:', itemId);
     navigate(`/update-item/${itemId}`);
   };
 
-  const handleDelete = async (itemId) => {
+  const handleDeleteConfirmation = (itemId) => {
+    setDeleteItemId(itemId);
+    setShowConfirmModal(true);
+  };
+
+  const handleDelete = async () => {
     try {
-      await InventoryService.deleteItem(itemId);
+      await InventoryService.deleteItem(deleteItemId);
 
       setInventoryItems((prevItems) =>
-        prevItems.filter((item) => item.id !== itemId)
+        prevItems.filter((item) => item.id !== deleteItemId)
       );
 
-      setShowModal(true); // Show the success modal
-      console.log(`Delete item with ID: ${itemId}`);
+      setDeleteItemId(null);
+      setShowConfirmModal(false);
+      setShowModal(true);
+      console.log(`Delete item with ID: ${deleteItemId}`);
     } catch (error) {
       console.error('Error deleting item:', error);
     }
@@ -53,8 +60,14 @@ function GetAllComponent() {
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
+  const handleCloseConfirmModal = () => {
+    setShowConfirmModal(false);
+    setDeleteItemId(null);
+  };
+
   return (
-    <Container className="vh-200 d-flex flex-column mb-5">
+    <Container className="vh-100 d-flex flex-column mb-5">
       <Row className="justify-content-between align-items-center mb-5 mt-5">
         <Col>
           <h2>Inventory Items</h2>
@@ -91,7 +104,7 @@ function GetAllComponent() {
                     <Button variant="warning" className="me-2" onClick={() => handleUpdate(item.id)}>
                       Edit
                     </Button>
-                    <Button variant="danger" onClick={() => handleDelete(item.id)}>
+                    <Button variant="danger" onClick={() => handleDeleteConfirmation(item.id)}>
                       Delete
                     </Button>
                   </td>
@@ -102,7 +115,23 @@ function GetAllComponent() {
         </Card.Body>
       </Card>
 
-      {/* Notification Modal */}
+      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this item?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseConfirmModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Item Deleted</Modal.Title>

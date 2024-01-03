@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
 import InventoryService from '../services/InventoryService';
 
@@ -164,12 +164,17 @@ function UpdateItem() {
                   Update Item
                 </Button>
               </Form>
+
+              <Link to="/">
+                <Button variant="secondary" className="w-100 mt-3">
+                  Back to Inventory
+                </Button>
+              </Link>
             </div>
           </div>
         </Col>
       </Row>
 
-      {/* Modal for Success */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Success</Modal.Title>

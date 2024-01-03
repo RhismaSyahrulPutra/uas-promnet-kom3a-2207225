@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Alert, Row, Col, Modal } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import InventoryService from '../services/InventoryService';
-
 
 function CreateInventory() {
   const [formData, setFormData] = useState({
@@ -177,6 +176,12 @@ function CreateInventory() {
                   Create Item
                 </Button>
               </Form>
+
+              <Link to="/">
+                <Button variant="secondary" className="w-100 mt-3">
+                  Back to Inventory
+                </Button>
+              </Link>
             </div>
           </div>
         </Col>
