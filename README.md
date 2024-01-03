@@ -29,6 +29,10 @@ Menambahkan fitur modal konfirmasi untuk bagian delete item
 
 Menambahkan beberapa button untuk mengoptimalkan navigasi antar halaman
 
+### 3. SearchBar By Name (Under Development)
+
+Membuat search bar untuk bisa melakukan search terhadap item di database berdasarkan name
+
 ## How To Use
 > [!WARNING]
 > You should follow the instructions given.
