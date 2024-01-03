@@ -6,24 +6,56 @@ import InventoryService from '../services/InventoryService';
 const customTableClass = "custom-table";
 
 function GetAllComponent() {
+  const [originalInventoryItems, setOriginalInventoryItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [inventoryItems, setInventoryItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+  const [searchError, setSearchError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchInventoryItems = async () => {
-      try {
-        const response = await InventoryService.getItem();
-        setInventoryItems(response.data);
-      } catch (error) {
-        console.error('Error fetching inventory items:', error);
-      }
-    };
-
     fetchInventoryItems();
   }, []);
+
+  useEffect(() => {
+    if (searchTerm === '') {
+      setInventoryItems(originalInventoryItems);
+      setSearchError(null);
+    } else {
+      searchInventoryByName();
+    }
+  }, [searchTerm, originalInventoryItems]);
+
+  const fetchInventoryItems = async () => {
+    try {
+      const response = await InventoryService.getItem();
+      setOriginalInventoryItems(response.data);
+      setInventoryItems(response.data);
+    } catch (error) {
+      console.error('Error fetching inventory items:', error);
+    }
+  };
+
+  const searchInventoryByName = async () => {
+    try {
+      const encodedSearchTerm = encodeURIComponent(searchTerm);
+      const response = await InventoryService.searchItemByName(encodedSearchTerm);
+      const searchData = response.data;
+  
+      if (searchData && searchData.length > 0) {
+        setInventoryItems(searchData);
+        setSearchError(null);
+      } else {
+        setInventoryItems([]);
+        setSearchError('No items found.');
+      }
+    } catch (error) {
+      console.error('Error searching inventory items:', error);
+      setSearchError('Error searching items. Please try again.');
+    }
+  };
 
   const handleView = (itemId) => {
     console.log('Viewing item with ID:', itemId);
@@ -73,6 +105,26 @@ function GetAllComponent() {
           <h2>Inventory Items</h2>
         </Col>
         <Col xs="auto">
+          <div className="d-flex">
+            <input
+              type="text"
+              placeholder="Search by Name"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Button
+              variant="primary"
+              className="ms-2"
+              onClick={() => {
+                setSearchTerm('');
+                fetchInventoryItems();
+              }}
+            >
+              Reset Search
+            </Button>
+          </div>
+        </Col>
+        <Col xs="auto">
           <Link to="/create-inventory">
             <Button variant="success">Create Item</Button>
           </Link>
@@ -80,41 +132,45 @@ function GetAllComponent() {
       </Row>
       <Card>
         <Card.Body>
-          <Table bordered striped responsive="md" className={`${customTableClass} table-hover`}>
-            <thead className="table-primary">
-              <tr>
-                <th>ID</th>
-                <th>Nama Barang</th>
-                <th>Jumlah</th>
-                <th>Harga Satuan</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {inventoryItems.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.nama_barang}</td>
-                  <td>{item.jumlah}</td>
-                  <td>{item.harga_satuan}</td>
-                  <td className="d-flex justify-content-center">
-                    <Button variant="info" className="me-2" onClick={() => handleView(item.id)}>
-                      View
-                    </Button>
-                    <Button variant="warning" className="me-2" onClick={() => handleUpdate(item.id)}>
-                      Edit
-                    </Button>
-                    <Button variant="danger" onClick={() => handleDeleteConfirmation(item.id)}>
-                      Delete
-                    </Button>
-                  </td>
+          {searchError && <p className="text-danger">{searchError}</p>}
+          {Array.isArray(inventoryItems) && inventoryItems.length > 0 ? (
+            <Table bordered striped responsive="md" className={`${customTableClass} table-hover`}>
+              <thead className="table-primary">
+                <tr>
+                  <th>ID</th>
+                  <th>Nama Barang</th>
+                  <th>Jumlah</th>
+                  <th>Harga Satuan</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {inventoryItems.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.nama_barang}</td>
+                    <td>{item.jumlah}</td>
+                    <td>{item.harga_satuan}</td>
+                    <td className="d-flex justify-content-center">
+                      <Button variant="info" className="me-2" onClick={() => handleView(item.id)}>
+                        View
+                      </Button>
+                      <Button variant="warning" className="me-2" onClick={() => handleUpdate(item.id)}>
+                        Edit
+                      </Button>
+                      <Button variant="danger" onClick={() => handleDeleteConfirmation(item.id)}>
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            <p>No items available.</p>
+          )}
         </Card.Body>
       </Card>
-
       <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Deletion</Modal.Title>
@@ -131,7 +187,6 @@ function GetAllComponent() {
           </Button>
         </Modal.Footer>
       </Modal>
-
       <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Item Deleted</Modal.Title>

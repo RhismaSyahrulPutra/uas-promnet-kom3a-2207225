@@ -22,6 +22,10 @@ class UserService {
   deleteItem(inventoryId) {
     return axios.delete(`${API_BASE_URL}/inventory_rhismasyahrulputra/${inventoryId}`);
   }
+
+  searchItemByName(name) {
+    return axios.get(`${API_BASE_URL}/inventory_rhismasyahrulputra/search?name=${name}`);
+  }
 }
 
 export default new UserService();

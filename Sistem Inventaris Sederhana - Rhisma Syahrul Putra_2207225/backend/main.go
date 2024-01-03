@@ -24,6 +24,7 @@ func main() {
 	router.HandleFunc("/inventory_rhismasyahrulputra/{id}", GetInventoryItem).Methods("GET")
 	router.HandleFunc("/inventory_rhismasyahrulputra/{id}", UpdateInventoryItem).Methods("PUT")
 	router.HandleFunc("/inventory_rhismasyahrulputra/{id}", DeleteInventoryItem).Methods("DELETE")
+	router.HandleFunc("/inventory_rhismasyahrulputra/search", SearchInventoryByName).Methods("GET")
 
 	// Add CORS middleware
 	handler := &CORSRouterDecorator{router}
@@ -151,6 +152,35 @@ func DeleteInventoryItem(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprintf(w, "Inventory item with ID = %s was deleted",
 		params["id"])
+}
+
+// SEARCH INVENTORY BY NAME
+func SearchInventoryByName(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var inventoryItems []InventoryItem
+
+	params := r.URL.Query()
+	searchTerm := params.Get("name")
+
+	result, err := DB.Query("SELECT id, nama_barang, jumlah, harga_satuan, lokasi, deskripsi FROM inventory_rhismasyahrulputra WHERE nama_barang LIKE ?", "%"+searchTerm+"%")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer result.Close()
+
+	for result.Next() {
+		var inventoryItem InventoryItem
+		err := result.Scan(&inventoryItem.ID, &inventoryItem.NamaBarang, &inventoryItem.Jumlah, &inventoryItem.HargaSatuan, &inventoryItem.Lokasi, &inventoryItem.Deskripsi)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		inventoryItems = append(inventoryItems, inventoryItem)
+	}
+
+	// Mengembalikan data dalam format JSON
+	json.NewEncoder(w).Encode(inventoryItems)
 }
 
 // =================================================================
