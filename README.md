@@ -19,6 +19,16 @@ React Js untuk bagian Frontend,Golang untuk Backend,dan MySQL sebagai basis data
 
 <p align="justify">Terima kasih kepada Bapak Erlangga atas bimbingan dan kesempatan ini. Saya berharap proyek ini dapat menjadi bukti kemajuan saya dalam memahami dan mengimplementasikan konsep-konsep pemrograman internet.</p>
 
+## Update
+
+### 1. Modal Confirmation
+
+Menambahkan fitur modal konfirmasi untuk bagian delete item
+
+### 2. Button Navigate
+
+Menambahkan beberapa button untuk mengoptimalkan navigasi antar halaman
+
 ## How To Use
 > [!WARNING]
 > You should follow the instructions given.
